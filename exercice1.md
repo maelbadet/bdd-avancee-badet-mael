@@ -1,9 +1,8 @@
 
 ## Selectionner toutes les classes et afficher le libellé de celle-ci.
 ```sql
-SELECT c.id, d.libelle
-FROM cours AS c
-INNER JOIN discipline AS d ON c.discipline_id = d.id;
+SELECT c.libelle_lang
+FROM classe AS c
 ```
  ## Selectionner toutes les classes dont le titre professionnel est CDA.
 ```sql
