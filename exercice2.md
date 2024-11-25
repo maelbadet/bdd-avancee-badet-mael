@@ -1,7 +1,6 @@
 ## nombre de posts par auteur
 ```sql
-SELECT 
-    a.id AS author_id,
+SELECT
     CONCAT(a.first_name, ' ', a.last_name) AS author_name,
     COUNT(p.id) AS post_count
 FROM authors AS a
@@ -49,17 +48,17 @@ WHERE (
 ### j'ai afficher en plus leurs nombre de posts et le nombre de posts moyen
 ```sql
 SELECT
-    CONCAT(a.first_name, ' ', a.last_name) AS author_name,
-    COUNT(p.id) AS post_count,
+CONCAT(a.first_name, ' ', a.last_name) AS author_name,
+COUNT(p.id) AS post_count,
     (SELECT AVG(post_count)
-     FROM (
-              SELECT COUNT(p.id) AS post_count
-              FROM authors AS a
-                       LEFT JOIN posts AS p ON a.id = p.author_id
-              GROUP BY a.id
-          ) AS subquery) AS average_post_count
+    FROM (
+        SELECT COUNT(p.id) AS post_count
+        FROM authors AS a
+        LEFT JOIN posts AS p ON a.id = p.author_id
+        GROUP BY a.id) 
+    AS subquery ) AS average_post_count
 FROM authors AS a
-         LEFT JOIN posts AS p ON a.id = p.author_id
+LEFT JOIN posts AS p ON a.id = p.author_id
 GROUP BY a.id, a.first_name, a.last_name
 HAVING COUNT(p.id) > (
     SELECT AVG(post_count)
