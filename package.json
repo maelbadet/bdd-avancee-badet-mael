@@ -1,0 +1,25 @@
+{
+  "name": "bdd-avancee-badet-mael",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maelbadet/bdd-avancee-badet-mael.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maelbadet/bdd-avancee-badet-mael/issues"
+  },
+  "homepage": "https://github.com/maelbadet/bdd-avancee-badet-mael#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.11.4"
+  }
+}
