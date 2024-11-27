@@ -1,61 +1,35 @@
 require('dotenv').config();
-const mysql = require('mysql2');
+const db = require('./data/database');
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-});
-
-function callStoredProcedure(authorId) {
-    return new Promise((resolve, reject) => {
-        const sql = 'CALL last_post_from_author(?)';
-        connection.query(sql, [authorId], (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(results[0]);
-        });
-    });
-}
-
-function callFunction(nombre1, nombre2) {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT addition(?, ?) AS result';
-        connection.query(sql, [nombre1, nombre2], (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(results[0].result);
-        });
-    });
-}
-
-
-connection.connect(async (err) => {
-    if (err) {
-        console.error('Erreur de connexion :', err.stack);
-        return;
-    }
-
-    connection.query('SELECT * FROM authors', (error, results) => {
-        if (error) {
-            console.error('Erreur lors de l’exécution de la requête :', error.stack);
-        } else {
-            console.log('Résultats :', results);
-        }
-    });
-
+(async () => {
     try {
-        const lastPost = await callStoredProcedure(1);
-        console.log('Dernier post de l\'auteur :', lastPost);
+        const newAuthorId = await db.insertElement('authors', { first_name: 'prenom1', last_name: 'nom1', email:'test@test.fr',birthdate:'1975-11-11', added:'1989-03-19 00:18:44' });
+        console.log('Nouvel auteur créé avec l\'ID :', newAuthorId);
 
-        const additionResult = await callFunction(10, 20);
-        console.log('Résultat de l\'addition :', additionResult);
+        const multiplePostIds = await db.insertMultipleElements('posts', [
+            { title: 'Post 1', description: 'Description 1', author_id: newAuthorId, content: 'sjvhdshdsilkhujsidfdisl', date:'2011-05-21' },
+            { title: 'Post 2', description: 'Description 2', author_id: newAuthorId, content: 'shgiyfisdhvsdvh wshvsjkdgfvhwiusehsdjklvh dsh fewsdljk;fhe', date:'2021-07-12' },
+        ]);
+        console.log('ID du premier post créé parmi plusieurs :', multiplePostIds);
+
+        const author = await db.getElementById('authors', newAuthorId);
+        console.log('Auteur récupéré :', author);
+
+        const allAuthors = await db.getAllElements('authors');
+        console.log('Tous les auteurs :', allAuthors);
+
+        const updatedRows = await db.updateElementById('authors', newAuthorId, { first_name: 'mael', last_name: 'badet', email:'maelbadet21@gmail.com',birthdate:'2002-08-26', added:'2024-11-27 16:05:22' });
+        console.log('Nombre de lignes mises à jour :', updatedRows);
+
+        const updatedauthor = await db.getElementById('authors', newAuthorId);
+        console.log('Auteur mis a jour récupéré :', updatedauthor);
+
+        const deletedRows = await db.deleteElementById('authors', newAuthorId);
+        console.log('Nombre de lignes supprimées :', deletedRows);
+
     } catch (error) {
-        console.error('Erreur lors de l\'exécution :', error);
+        console.error('Erreur :', error);
     } finally {
-        connection.end();
+        db.closeConnection();
     }
-});
+})();
