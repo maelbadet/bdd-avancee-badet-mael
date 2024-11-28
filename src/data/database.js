@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
@@ -5,6 +6,14 @@ const connection = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+});
+
+connection.connect((err) => {
+    if (err) {
+        console.error('Erreur de connexion :', err);
+        return;
+    }
+    console.log('Connecté à la base de données MySQL');
 });
 
 function query(sql, params = []) {
@@ -34,12 +43,6 @@ async function insertElement(table, data) {
     return result.insertId;
 }
 
-async function insertMultipleElements(table, dataArray) {
-    const sql = `INSERT INTO ${table} (${Object.keys(dataArray[0]).join(', ')}) VALUES ?`;
-    const values = dataArray.map((data) => Object.values(data));
-    const result = await query(sql, [values]);
-    return result.insertId;
-}
 
 async function updateElementById(table, id, data) {
     const sql = `UPDATE ${table} SET ? WHERE id = ?`;
@@ -47,13 +50,6 @@ async function updateElementById(table, id, data) {
     return result.affectedRows;
 }
 
-async function updateMultipleElementsById(table, updates) {
-    const promises = updates.map(({ id, data }) =>
-        query(`UPDATE ${table} SET ? WHERE id = ?`, [data, id])
-    );
-    const results = await Promise.all(promises);
-    return results.map((result) => result.affectedRows);
-}
 
 async function deleteElementById(table, id) {
     const sql = `DELETE FROM ${table} WHERE id = ?`;
@@ -61,20 +57,20 @@ async function deleteElementById(table, id) {
     return result.affectedRows;
 }
 
-async function deleteMultipleElementsByIds(table, ids) {
-    const sql = `DELETE FROM ${table} WHERE id IN (?)`;
-    const result = await query(sql, [ids]);
-    return result.affectedRows;
+async function searchElementsByName(table, searchValue, fields = ['name']) {
+    const conditions = fields.map(field => `${field} LIKE ?`).join(' OR ');
+    const sql = `SELECT * FROM ${table} WHERE ${conditions}`;
+    const params = fields.map(() => `%${searchValue}%`);
+    return await query(sql, params);
 }
+
 
 module.exports = {
     getElementById,
     getAllElements,
     insertElement,
-    insertMultipleElements,
     updateElementById,
-    updateMultipleElementsById,
     deleteElementById,
-    deleteMultipleElementsByIds,
+    searchElementsByName,
     closeConnection: () => connection.end(),
 };
