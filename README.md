@@ -56,6 +56,33 @@ pour lancer le projet, il suffit de faire un `npm run dev`
 
 `PUT : localhost:300/employee/:id` : modifie les informations d'un employer
 
+`GET : localhost:300/employee/delete/:id` : supprime un employer selon l'ID donner
+
+#### routes pour les services :
+`GET : localhost:300/employee` : affiche la liste de tous les services
+
+`GET : localhost:300/employee/:id` : affiche les informations d'un service selon son ID
+
+`POST : localhost:300/employee/` : creer un nouveau service
+
+`PUT : localhost:300/employee/:id` : modifie les informations d'un service
+
+`GET : localhost:300/employee/delete/:id` : supprime un service selon l'ID donner
+
+#### routes pour les managers :
+`GET : localhost:300/manage` : affiche la liste de tous les managers
+
+`GET : localhost:300/employee/:id` : affiche les informations d'un manager selon son ID
+
+`POST : localhost:300/employee/` : creer un nouveau manager
+
+`PUT : localhost:300/employee/:id` : modifie les informations d'un manager
+
+`GET : localhost:300/employee/delete/:id` : supprime un manager selon l'ID donner
+
+#### routes pour la procedure :
+`GET : localhost:300/:name` : affiche la procedure avec le bon nom fournis
+
 ### lancer les test unitaires
 pour lancer les differents tests unitaires que j'ai fais, il suffit
 de faire un `npm run test`
