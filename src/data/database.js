@@ -13,6 +13,7 @@ async function query(sql, params = []) {
     return results;
 }
 
+// fonction generale de l'evaluation'
 async function getAllElements(table) {
     const sql = `SELECT *
                  FROM ${table}`;
@@ -49,6 +50,24 @@ async function deleteElementById(table, id) {
     return result.affectedRows;
 }
 
+// fonction specifique a l'evaluation :
+
+async function getManagerByService(serviceId) {
+    const sql = `
+        SELECT e.*
+        FROM employees e
+                 INNER JOIN manages m ON e.id = m.employee_id
+        WHERE m.service_id = ?;
+    `;
+    return await query(sql, [serviceId]);
+}
+
+async function executeStoredProcedure(procedureName, params = []) {
+    const placeholders = params.map(() => '?').join(', ');
+    const sql = `CALL ${procedureName}(${placeholders});`;
+    return await query(sql, params);
+}
+
 async function closeConnection() {
     await connection.end();
 }
@@ -60,6 +79,8 @@ module.exports =
         getElementById,
         insertElement,
         updateElement,
+        executeStoredProcedure,
+        getManagerByService,
         deleteElementById,
         closeConnection,
     };

@@ -26,7 +26,7 @@ DELIMITER $$
         FROM services as s
         LEFT JOIN employees as e ON s.id = e.service_id
         GROUP BY s.id, s.name
-        ORDER BY total_salary DESCLIMIT 5;
+        ORDER BY total_salary DESC LIMIT 5;
     END $$
 DELIMITER ;
 CALL GetTop5ServicesBySalary();

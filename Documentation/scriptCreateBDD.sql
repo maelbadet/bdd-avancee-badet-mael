@@ -19,10 +19,10 @@ CREATE TABLE employees (
 );
 
 CREATE TABLE manages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     service_id INT,
     employee_id INT,
-    start_sate DATE,
-    PRIMARY KEY (service_id, employee_id),
+    start_date DATE,
     FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
     FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
 );

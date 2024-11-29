@@ -17,8 +17,8 @@ De créer les procédures stockées permettant de retrouver les données suivant
 - Le top 5 des services par masse salariale 
 - La liste des managers et le service dont ils s'occupent 
 
-De créer une fonction permettant de trouver l'écart entre le plus gros et le plus petit salaire de
-  l'entreprise
+De créer une fonction permettant de trouver l'écart entre le plus gros 
+et le plus petit salaire de l'entreprise
 
 ## Deuxieme partie du devoir (projet nodeJS)
 ### Creation du projet
@@ -46,6 +46,20 @@ DB_NAME=myDatabase
 ### Lancement du projet
 pour lancer le projet, il suffit de faire un `npm run dev`
 
+### test des routes 
+#### routes pour les employers : 
+`GET : localhost:300/employee` : affiche la liste de tous les employers
+
+`GET : localhost:300/employee/:id` : affiche les informations d'un employer selon son ID
+
+`POST : localhost:300/employee/` : creer un nouvelle employer
+
+`PUT : localhost:300/employee/:id` : modifie les informations d'un employer
+
 ### lancer les test unitaires
 pour lancer les differents tests unitaires que j'ai fais, il suffit
 de faire un `npm run test`
+
+### probleme rencontree : 
+probleme lors du lancement du projet car je n'avais pas renseigner 
+le bon fichier dans le script de demarage
