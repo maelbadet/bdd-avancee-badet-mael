@@ -32,7 +32,9 @@ router.get('/search/:name', async (req, res) => {
         if (authors.length > 0) {
             res.json(authors);
         } else {
-            res.status(200).json({error: 'Aucun auteur trouvé avec ce nom ou prénom.'});
+            res.status(200).json({
+                error: 'Aucun auteur trouvé avec ce nom ou prénom.'
+            });
         }
     } catch (error) {
         console.error('Erreur lors de la recherche :', error);

@@ -1,30 +1,16 @@
 require('dotenv').config();
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
 });
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Erreur de connexion :', err);
-        return;
-    }
-    console.log('Connecté à la base de données MySQL');
-});
-
-function query(sql, params = []) {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, params, (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(results);
-        });
-    });
+async function query(sql, params = []) {
+    const [results] = await connection.query(sql, params);
+    return results;
 }
 
 async function getElementById(table, id) {
@@ -64,13 +50,18 @@ async function searchElementsByName(table, searchValue, fields = ['name']) {
     return await query(sql, params);
 }
 
+async function closeConnection() {
+    await connection.end();
+}
+
 
 module.exports = {
+    connection,
     getElementById,
     getAllElements,
     insertElement,
     updateElementById,
     deleteElementById,
     searchElementsByName,
-    closeConnection: () => connection.end(),
+    closeConnection,
 };
