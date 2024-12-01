@@ -14,7 +14,7 @@ beforeAll(async () => {
     await connection.query("DELETE FROM manages WHERE employee_id=2");
     const [resultset] = await connection.query(
         "INSERT INTO manages (service_id, employee_id, start_date) VALUES (?, ?, ?)",
-        [1, 2, "1960-01-01 23:53:02"]
+        [3, 2, "1960-01-01 23:53:02"]
     );
     newManageId = resultset.insertId;
 });
@@ -31,7 +31,7 @@ test("getAllElements doit me retourner un tableau de plusieurs managers", async 
 
 test("getElementById doit me renvoyer le service_id et le employee_id en fonction de son ID", async () => {
     const managerDetails = {
-        service_id: 1,
+        service_id: 3,
         employee_id: 2,
     };
     const managerId = await getElementById("manages", newManageId);
@@ -41,7 +41,7 @@ test("getElementById doit me renvoyer le service_id et le employee_id en fonctio
 
 test("InsertElement doit inserer un manager dans la base de donne", async () => {
     const newManagerData = {
-        service_id: 1,
+        service_id: 3,
         employee_id: 5,
         start_date: '2020-05-24',
     }
